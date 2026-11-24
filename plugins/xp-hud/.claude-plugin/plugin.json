@@ -1,0 +1,14 @@
+{
+  "name": "xp-hud",
+  "displayName": "XP HUD",
+  "version": "0.1.0",
+  "description": "An RPG style XP and level bar for the Claude Code status line, with HP, MP and STA meters for your context window, 5 hour session and weekly usage.",
+  "author": {
+    "name": "Shravan Amudala",
+    "url": "https://github.com/ShravanAmudala55"
+  },
+  "homepage": "https://github.com/ShravanAmudala55/codarc",
+  "repository": "https://github.com/ShravanAmudala55/codarc",
+  "license": "MIT",
+  "keywords": ["statusline", "gamification", "xp", "level", "usage", "context"]
+}
