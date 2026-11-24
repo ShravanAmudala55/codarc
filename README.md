@@ -89,18 +89,11 @@ Level `L` needs `round(250 × (L − 1)^1.8)` XP, up to level 99.
 
 ## Tiers
 
-| Tier | From level |
-| --- | --- |
-| Bronze Spark | 1 |
-| Silver Ember | 5 |
-| Gold Blaze | 10 |
-| Crystal Flame | 15 |
-| Master Coder | 20 |
-| Champion Builder | 30 |
-| Titan Architect | 40 |
-| Legend Blazer | 50 |
-| Mythic Legend | 75 |
-| Eternal Inferno | 99 |
+Ten tiers, each with its own badge. The badge and title change as you level up, and hovering the title in the band shows this same list.
+
+<p align="center">
+  <img src="docs/level-ladder.png" alt="Level ladder: Bronze Spark from level 1, Silver Ember 5, Gold Blaze 10, Crystal Flame 15, Master Coder 20, Champion Builder 30, Titan Architect 40, Legend Blazer 50, Mythic Legend 75, Eternal Inferno 99, with the XP needed for each" width="560">
+</p>
 
 ## Privacy
 
