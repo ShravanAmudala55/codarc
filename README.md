@@ -1,15 +1,59 @@
-<p align="center"><img src="plugins/codarc/logo/logo.svg" alt="codarc logo" width="140"></p>
+<p align="center">
+  <img src="plugins/codarc/logo/logo.svg" alt="codarc logo" width="150">
+</p>
 
-# codarc
+<h1 align="center">codarc | plugin</h1>
 
-RPG levels for Claude Code. You earn XP for work that actually happened (tests that pass, commits that stick, builds that succeed), not for chatting. This repo is a plugin marketplace with two plugins that share one save file:
+<p align="center">
+  <b>Level up for work that actually happened.</b><br>
+  An RPG XP band for Claude Code. You earn XP for passing tests, commits that stick and builds that succeed, not for chatting.
+</p>
 
-| Plugin | What it is |
-| --- | --- |
-| [codarc](plugins/codarc) | A band above the prompt in the Claude desktop app: level, tier badge, XP bar, streak, fire or water mascot |
-| [xp-hud](plugins/xp-hud) | The terminal status line, plus the hooks that pay XP for verified work |
+<p align="center">
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-c8ff3d?labelColor=2b1f78"></a>
+  <img alt="Claude Code plugin" src="https://img.shields.io/badge/Claude%20Code-plugin-c8ff3d?labelColor=2b1f78">
+  <img alt="Python 3" src="https://img.shields.io/badge/python-3-c8ff3d?labelColor=2b1f78">
+  <img alt="Tests: 32 passing" src="https://img.shields.io/badge/tests-32%20passing-c8ff3d?labelColor=2b1f78">
+</p>
 
-## Install
+<p align="center">
+  <img src="docs/level-up.gif" alt="codarc band counting up XP smoothly through six levels, with the tier badge changing from Bronze Spark to Silver Ember" width="720">
+</p>
+
+## See it in action
+
+**Levelling up.** Passing tests, commits and builds fill the bar. Cross a level and the bar wraps; cross a tier and the title and badge change. This one is a time-lapse from level 1 to level 6.
+
+<img src="docs/level-up.gif" alt="XP counting up smoothly from level 1 to level 6, with the badge changing from Bronze Spark to Silver Ember at level 5" width="720">
+
+**Daily streak.** The first turn of each day extends your streak and pays a bonus.
+
+<img src="docs/streak.gif" alt="Close-up of the streak pill changing from 1d to 2d" width="720">
+
+**Rewards.** Commits, fixed bugs and passing tests pay XP, and the first time you use a skill you get a celebration.
+
+<img src="docs/rewards.gif" alt="Close-up of the XP bar gaining XP from a commit and a fixed bug, then a NEW SKILL celebration banner" width="720">
+
+**Water usage.** Hover the mascot to switch from fire to water and see a rough estimate of the cooling water behind your Claude spend.
+
+<img src="docs/water.gif" alt="Switching the fire mascot to the water mascot and the streak pill showing millilitres of water" width="720">
+
+<sub>These animations are rendered from the band's own drawing code with sample numbers, not screen recordings. The toast style is illustrative, and in the level-up time-lapse the numbers count up smoothly (the live band updates in steps).</sub>
+
+## Why
+
+Most XP bars reward volume: tokens spent, messages sent, lines scrolled. That teaches nothing, and it is easy to farm.
+codarc pays only for outcomes it can check. A passing test run, a new commit hash and a successful build earn XP, each with a daily cap. Spending money earns nothing.
+
+## What you get
+
+- **A level band above the prompt** (Claude desktop app) with a faceted tier badge, an XP bar with the number inside, and a streak.
+- **A terminal status line** with the same level, plus HP, MP and STA meters for your context window and rate limits.
+- **Ten tiers**, from Bronze Spark to Eternal Inferno, each with its own badge. Hover the title to see them all.
+- **A fire or water mascot** that you can swap on hover. In water mode it shows a rough estimate of the water your Claude spend uses.
+- **One save file** (`~/.claude/xp-hud/state.json`), so the desktop band and the terminal bar always show the same level.
+
+## Quick start
 
 ```bash
 claude plugin marketplace add ShravanAmudala55/codarc
@@ -17,101 +61,78 @@ claude plugin install xp-hud@shravan-plugins
 claude plugin install codarc@shravan-plugins
 ```
 
-Install `xp-hud` for the terminal bar and the XP hooks, `codarc` for the desktop band, or both. Both read and write `~/.claude/xp-hud/state.json`, so they always show the same level.
+Restart Claude, then send a message. The band appears above the prompt.
+For the terminal bar, run `/xp-hud:setup` once. It writes the `statusLine` entry into `~/.claude/settings.json` (it never overwrites an existing one).
 
-## xp-hud: terminal status line
-
-An RPG style level bar for the Claude Code status line. Everything you build with Claude Code earns XP, levels you up and grows a daily streak, while HP, MP and STA meters show how much of your context window, 5 hour session and weekly usage you have left.
-
-```
-Lv 6 Script Squire  ▰▰▰▰▰▰▰▰▰▱ 1643/1759 XP  🔥4d
-HP ██████░░░░ 62%  MP ████████░░ 77% (2h14m)  STA ██████░░░░ 59%
-```
-
-### Install
-
-```bash
-claude plugin marketplace add ShravanAmudala55/codarc
-claude plugin install xp-hud@shravan-plugins
-```
-
-Then, inside Claude Code, run this once:
-
-```
-/xp-hud:setup
-```
-
-A plugin cannot switch on a status line by itself, so setup writes the `statusLine` entry into `~/.claude/settings.json` for you. The bar appears after your next message.
-
-Already have a status line? Setup will not overwrite it. Run one of these instead:
-
-- `/xp-hud:setup --chain` keeps your current status line and shows it underneath the XP bar
-- `/xp-hud:setup --force` replaces it (a backup of your settings is kept)
-
-### The meters
-
-| Meter | Shows what is left of | Source field |
+| Plugin | Where it works | What it does |
 | --- | --- | --- |
-| HP | your context window | `context_window.used_percentage` |
-| MP | your 5 hour session limit, with a reset countdown | `rate_limits.five_hour` |
-| STA | your weekly limit | `rate_limits.seven_day` |
+| [`codarc`](plugins/codarc) | Claude desktop app | The band above the prompt: level, badge, XP bar, streak, mascot |
+| [`xp-hud`](plugins/xp-hud) | Terminal | The status line, plus the hooks that pay XP for verified work |
 
-The bars show what is left, so they drain as you work and turn yellow, then red, when you run low. Claude Code only sends the session and weekly numbers for claude.ai Pro and Max subscribers, so API key users just see HP.
+Install both for the full experience. Either one also works on its own.
 
-### How XP works
+## How XP works
 
 | Source | XP | Daily cap |
 | --- | --- | --- |
 | Tests pass | 15 | 5 |
-| Tests pass after failing earlier | +25 | 3 |
-| A new `git commit` (amends pay nothing) | 20 | 5 |
+| Tests pass after failing earlier in the session | +25 | 3 |
+| New `git commit` (amends pay nothing) | 20 | 5 |
 | Build or lint passes | 8 | 3 |
-| Source lines you add (Edit or Write) | 0.2 per line | 60 XP |
-| First work of the day | 25, plus 5 per streak day (up to 50 extra) | once a day |
-| Each achievement | 100 | once each |
+| Source lines you add | 0.2 per line | 60 XP |
+| First work of the day | 25, plus 5 per extra streak day | once a day |
+| First use of a skill | 30 | once per skill |
 
-XP comes from outcomes that can be checked, not from how much you spend or how many lines scroll by. A small hook runs after Bash, Edit and Write calls to spot them. Spend is still tracked, just not paid. Opening a session without doing anything earns nothing.
+Level `L` needs `round(250 × (L − 1)^1.8)` XP, up to level 99.
 
-The XP needed to reach level L is `250 * (L - 1) ^ 1.8`, up to level 99. All the numbers live at the top of `plugins/xp-hud/scripts/xp.py` if you want to make levelling faster or slower.
+**Built to resist farming:** every source has a daily cap, commit hashes are de-duplicated, amends pay nothing, and a session that does nothing earns nothing. All the numbers sit at the top of [`xp.py`](plugins/xp-hud/scripts/xp.py) if you want levelling faster or slower.
 
-Titles: Rookie Prompter, Script Squire, Code Knight, Refactor Ranger, Bug Slayer, Architect, Archmage, Grandmaster, Mythic Engineer and Legend.
+## Tiers
 
-Achievements: First Blood, On a Roll (3 day streak), Week Warrior (7), Unstoppable (30), Centurion (1,000 lines changed), Night Owl (working between midnight and 5am), Early Bird (5am to 8am), Marathon (a single session past 3 hours) and Near Death Experience (context past 95 percent).
+| Tier | From level |
+| --- | --- |
+| Bronze Spark | 1 |
+| Silver Ember | 5 |
+| Gold Blaze | 10 |
+| Crystal Flame | 15 |
+| Master Coder | 20 |
+| Champion Builder | 30 |
+| Titan Architect | 40 |
+| Legend Blazer | 50 |
+| Mythic Legend | 75 |
+| Eternal Inferno | 99 |
 
-### Commands
+## Privacy
 
-- `/xp-hud:stats` shows your character sheet: level, XP, streak, lifetime totals and achievements
-- `/xp-hud:setup` turns on the status line
+Everything stays on your machine. There are no network calls, and codarc never reads your prompts or transcripts.
+After a Bash, Edit or Write call, a hook looks at the command, the file path and whether it succeeded, only to recognise tests, commits, builds and source edits. None of that text is stored. The save file keeps counters and short commit hashes.
 
-### Privacy
+## Requirements
 
-Everything stays on your machine. The plugin makes no network calls and never reads your prompts or transcripts. It looks at the numbers Claude Code hands to a status line (cost totals, lines changed, context percentage, rate limit percentages) and, after each Bash, Edit or Write call, at the command that ran, the file path and whether it succeeded, only to recognise tests, commits, builds and source edits. None of that text is stored: the save file keeps only counters and short commit hashes in `~/.claude/xp-hud/state.json`.
+- Claude Code with plugin support. The band needs the Claude desktop app.
+- Python 3 on your `PATH` for the terminal plugin.
+- On Windows, edit the `python3` command in `plugins/xp-hud/hooks/hooks.json` and the two skills to `python`. File locking is not implemented there yet.
 
-### Uninstall
+## Uninstall
 
 ```bash
 python3 ~/.claude/xp-hud/xp.py uninstall
 claude plugin uninstall xp-hud@shravan-plugins
+claude plugin uninstall codarc@shravan-plugins
 ```
 
-The first command removes the status line entry (and restores your previous one if you used `--chain`). Your save file is kept, so you can come back to your level later.
+Your save file is kept, so you can come back to your level later.
 
-### Requirements and notes
-
-- Python 3 on your PATH. The hook and the skills call `python3`; on Windows, where it is often just `python`, edit `plugins/xp-hud/hooks/hooks.json` and the two skills to match.
-- Several sessions running at once is fine on macOS and Linux (the save file is locked while it is updated). There is no file locking on Windows yet.
-- If the bar ever shows an error, run `claude --debug` with `XP_HUD_DEBUG=1` set to see the traceback.
-
-### Development
+## Development
 
 ```bash
 python3 -m unittest discover -s tests -v
 claude plugin validate .
-claude plugin validate plugins/xp-hud
 ```
 
-To try changes without installing, start a session with `claude --plugin-dir ./plugins/xp-hud`.
+Try changes without installing: `claude --plugin-dir ./plugins/xp-hud`.
+Issues and ideas are welcome.
 
-### License
+## Credits and licence
 
-MIT
+MIT, see [LICENSE](LICENSE). Comic lettering uses glyph outlines from [Bangers](https://github.com/googlefonts/bangers) (SIL OFL 1.1), see [NOTICE](plugins/codarc/NOTICE.md). The water figure is an estimate, not an Anthropic number.
